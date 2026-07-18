@@ -189,7 +189,6 @@ This project is licensed under the **MIT License**.
 You are free to use, modify, distribute, and contribute to this project.
 
 ---
----
 
 # 💛 Support the Project
 
