@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2FA Code Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/">
+        <span class="brand-mark">2F</span>
+        <span>
+          <strong>Authenticator</strong>
+          <small>Private TOTP generator</small>
+        </span>
+      </a>
+    </header>
+
+    <main class="shell" id="generator">
+      <section class="hero">
+        <p class="eyebrow">Local 2FA Utility</p>
+        <h1>Generate secure 2FA codes.</h1>
+        <p class="lead">Paste your authenticator secret and get a fresh one-time code every 30 seconds.</p>
+      </section>
+
+      <section class="glass-card">
+        <form id="totpForm" class="input-panel">
+          <div class="section-title">
+            <span>Secret</span>
+            <small>Used only for this session</small>
+          </div>
+          <label for="secret">2FA Secret</label>
+          <textarea id="secret" name="secret" spellcheck="false" autocomplete="off" placeholder="Paste 2FA secret here"></textarea>
+        </form>
+
+        <section class="result-panel">
+          <div class="section-title">
+            <span>Code</span>
+            <small id="timer">Waiting for secret</small>
+          </div>
+
+          <div class="token-meter" aria-label="Token timer">
+            <div class="token-head">
+              <span class="token-title"><i aria-hidden="true"></i>Token lifetime</span>
+              <span class="token-pill"><b id="tokenSeconds">s</b></span>
+            </div>
+            <div class="token-bars" id="tokenBars" aria-hidden="true"></div>
+          </div>
+
+          <div class="code-display">
+            <button id="codeValue" class="code-value" type="button" title="Click to copy code">------</button>
+            <small>Click to copy</small>
+          </div>
+
+          <label for="display">Result</label>
+          <textarea id="display" readonly placeholder="SECRET | CODE"></textarea>
+
+          <div class="actions">
+            <button class="secondary" id="copyAll" type="button">Copy All</button>
+            <button class="primary" id="copyCode" type="button">Copy Code</button>
+          </div>
+          <p id="message"></p>
+        </section>
+      </section>
+
+      <section class="security-note" id="security">
+        <span>Private</span>
+        <p>Your secret is used only to create the current code. Nothing is stored after generation.</p>
+      </section>
+    </main>
+
+    <footer class="footer-line">
+      <span>Powered by</span>
+      <a href="https://DevRouter.t.me" target="_blank" rel="noreferrer">URANIUM</a>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
