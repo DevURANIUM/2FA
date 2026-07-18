@@ -189,12 +189,25 @@ This project is licensed under the **MIT License**.
 You are free to use, modify, distribute, and contribute to this project.
 
 ---
+---
 
-# ⭐ Support
+# 💛 Support the Project
 
-If this project helped you, please consider giving it a ⭐ on GitHub.
+If you find this project useful and would like to support its continued development, you can donate using any of the following cryptocurrencies.
 
-It helps others discover the project and motivates future development.
+Every contribution—no matter how small—helps cover development time, infrastructure costs, and future improvements.
+
+| Network | Address |
+|---------|---------|
+| **Bitcoin (BTC)** | `bc1qcclcp574hnznm0nmdzzf0ta7366svjskttqks3` |
+| **Litecoin (LTC)** | `ltc1qcrkelw38gjrmg0ptjy2nshqej622kp76het7q0` |
+| **XRP** | `rPoK5SBChFPqEiQv1W97LW6FKoJZLipDVQ` |
+| **Stellar (XLM)** | `GDMUQREEZNBSTQOT5BV7MYEMXJFV3CYRZXUVOYCTIUZTHUWPHLVASFVD` |
+| **TON** | `UQAJH2N0pqpvC9YN841w5NH1dCN9Lakwkpjvoy7vXf-vfqgv` |
+| **TRON (TRX)** | `TXJqhhwvkrTdnf5HReZf55hEzZuxjto3R4` |
+| **USDT (BEP20)** | `0x1591036c4bD05b046532B65Df939fcd7824E18c7` |
+
+> ❤️ Every contribution, no matter how small, helps keep this project alive and enables future updates, new features, and ongoing maintenance.
 
 ---
 
