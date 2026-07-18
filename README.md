@@ -99,7 +99,7 @@ After deployment, Wrangler will output your Worker URL.
 # 📂 Project Structure
 
 ```
-cf-worker/
+2FA/
 │
 ├── public/
 │   ├── index.html
