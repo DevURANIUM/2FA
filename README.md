@@ -207,7 +207,7 @@ Every contribution—no matter how small—helps cover development time, infrast
 | **TRON (TRX)** | `TXJqhhwvkrTdnf5HReZf55hEzZuxjto3R4` |
 | **USDT (BEP20)** | `0x1591036c4bD05b046532B65Df939fcd7824E18c7` |
 
-> ❤️ Every contribution, no matter how small, helps keep this project alive and enables future updates, new features, and ongoing maintenance.
+> ☕️ Every contribution, no matter how small, helps keep this project alive and enables future updates, new features, and ongoing maintenance.
 
 ---
 
