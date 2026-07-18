@@ -4,7 +4,7 @@ A modern, lightweight, and serverless **Time-based One-Time Password (TOTP)** ge
 
 This project allows you to generate secure 6-digit authentication codes directly from your browser using a Base32 secret. Everything runs on Cloudflare's global edge network, providing extremely fast response times without requiring any backend server, VPS, or database.
 
-🌐 **Live Demo:** [2Live.ir]https://2Live.ir
+🌐 **Live Demo:** [2Live.ir](https://2Live.ir)
 
 ---
 
