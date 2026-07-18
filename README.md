@@ -27,7 +27,7 @@ This project allows you to generate secure 6-digit authentication codes directly
 
 Visit the live demo below:
 
-https://2Live.ir
+[2Live.ir](https://2Live.ir)
 
 ---
 
