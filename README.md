@@ -58,11 +58,6 @@ Supported services include:
 ```bash
 git clone https://github.com/DevURANIUM/2FA.git
 ```
-
-```bash
-cd DevURANIUM/cf-worker
-```
-
 ---
 
 ## Install dependencies
