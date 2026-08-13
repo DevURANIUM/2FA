@@ -28,10 +28,18 @@
         <form id="totpForm" class="input-panel">
           <div class="section-title">
             <span>Secret</span>
-            <small>Used only for this session</small>
+            <small>Saved in this browser</small>
           </div>
           <label for="secret">2FA Secret</label>
           <textarea id="secret" name="secret" spellcheck="false" autocomplete="off" placeholder="Paste 2FA secret here"></textarea>
+
+          <div class="history-header">
+            <label for="historyList">Saved 2FA secrets</label>
+            <button id="clearHistory" class="history-clear" type="button">Clear</button>
+          </div>
+          <div id="historyList" class="history-list" aria-live="polite">
+            <p class="history-empty">Saved 2FA secrets will appear here.</p>
+          </div>
         </form>
 
         <section class="result-panel">
@@ -66,7 +74,7 @@
 
       <section class="security-note" id="security">
         <span>Private</span>
-        <p>Your secret is used only to create the current code. Nothing is stored after generation.</p>
+        <p>Your saved 2FA secrets stay in this browser only. Generated codes are not stored.</p>
       </section>
     </main>
 

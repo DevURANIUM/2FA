@@ -222,6 +222,15 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.11), inset 0 1px 14px rgba(0, 0, 0, 0.20);
 }
 
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+.history-header label { margin: 0; }
+.history-clear { padding: 5px 9px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 11px; }
+.history-list { display: grid; gap: 7px; margin-top: 8px; }
+.history-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; border: 1px solid var(--border); background: rgba(8, 13, 28, 0.52); color: var(--text); text-align: left; }
+.history-item span { overflow-wrap: anywhere; font: 800 14px/1.5 "SFMono-Regular", Consolas, monospace; letter-spacing: .03em; }
+.history-item small, .history-empty { color: var(--muted-2); font-size: 11px; }
+.history-empty { margin: 0; padding: 10px 2px; }
+
 button {
   border: 0;
   border-radius: 12px;

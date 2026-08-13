@@ -9,6 +9,8 @@ const codeValue = document.querySelector("#codeValue");
 const tokenSeconds = document.querySelector("#tokenSeconds");
 const tokenBars = document.querySelector("#tokenBars");
 const tokenMeter = document.querySelector(".token-meter");
+const historyList = document.querySelector("#historyList");
+const clearHistory = document.querySelector("#clearHistory");
 
 let activeSecret = "";
 let activeCode = "";
@@ -20,6 +22,46 @@ let isGenerating = false;
 let queuedRefresh = false;
 let requestSerial = 0;
 const tokenSegmentCount = 30;
+const maxSavedSecrets = 5;
+const historyStorageKey = "totp-history-v1";
+const secretStorageKey = "totp-secret-v1";
+let history = loadHistory();
+
+function loadHistory() {
+  try {
+    const value = JSON.parse(localStorage.getItem(historyStorageKey) || "[]");
+    return Array.isArray(value) ? value.slice(0, maxSavedSecrets) : [];
+  } catch { return []; }
+}
+
+function renderHistory() {
+  historyList.replaceChildren();
+  if (!history.length) {
+    const empty = document.createElement("p");
+    empty.className = "history-empty";
+    empty.textContent = "Saved 2FA secrets will appear here.";
+    historyList.appendChild(empty);
+    return;
+  }
+  history.forEach((item) => {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = "history-item";
+    const secretText = document.createElement("span");
+    secretText.textContent = item.secret;
+    row.appendChild(secretText);
+    row.addEventListener("click", () => { secretInput.value = item.secret; activeSecret = item.secret; refresh(); });
+    historyList.appendChild(row);
+  });
+}
+
+function saveHistory(secret) {
+  history = [{ secret }, ...history.filter((item) => item.secret !== secret)].slice(0, maxSavedSecrets);
+  try {
+    localStorage.setItem(historyStorageKey, JSON.stringify(history));
+  } catch { /* Storage may be disabled; keep history for this page load. */ }
+  renderHistory();
+}
 
 for (let index = 0; index < tokenSegmentCount; index += 1) {
   tokenBars.appendChild(document.createElement("span"));
@@ -115,6 +157,10 @@ async function fetchCode(showSuccess = false) {
   expiresAtMs = (data.expires_at || 0) * 1000;
   display.value = data.display;
   codeValue.textContent = data.code;
+  try {
+    localStorage.setItem(secretStorageKey, secret);
+  } catch { /* Storage may be disabled; generation still works. */ }
+  saveHistory(secret);
   renderTimer();
 
   setMessage("");
@@ -209,3 +255,21 @@ setInterval(() => {
     refresh();
   }
 }, 1000);
+
+clearHistory.addEventListener("click", () => {
+  history = [];
+  try {
+    localStorage.removeItem(historyStorageKey);
+  } catch { /* Storage may be disabled. */ }
+  renderHistory();
+});
+
+try {
+  const savedSecret = localStorage.getItem(secretStorageKey);
+  if (savedSecret) {
+    secretInput.value = savedSecret;
+    activeSecret = savedSecret;
+    refresh();
+  }
+} catch { /* Storage may be disabled; generation still works. */ }
+renderHistory();
