@@ -1,6 +1,6 @@
 // Service worker: keeps the app shell cached so the page opens and generates
 // codes offline. Bump CACHE whenever shell files change to force a refresh.
-const CACHE = "authenticator-v1";
+const CACHE = "authenticator-v2";
 const SHELL = [
   "/",
   "/v2/vault.css",

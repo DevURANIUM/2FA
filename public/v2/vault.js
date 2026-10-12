@@ -408,13 +408,13 @@ $("#copyFull").addEventListener("click", () => {
 });
 
 clearAll.addEventListener("click", () => {
-  if (!confirm("Remove all saved secrets from this browser?")) return;
   items = [];
   codes.clear();
   activeId = null;
   save();
   renderCards();
   renderStage();
+  showToast("All keys cleared");
 });
 
 function isTyping(target) {
