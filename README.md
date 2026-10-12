@@ -1,74 +1,74 @@
 # Authenticator — 2FA TOTP
 
-یک مولد سبک و خصوصی برای کدهای TOTP دو مرحله‌ای که روی Cloudflare Workers میزبانی می‌شود و به‌صورت PWA قابل نصب است.
+A lightweight, private generator for two-factor TOTP codes, hosted on Cloudflare Workers and installable as a PWA.
 
-نسخه‌ی آنلاین: https://2fa-totp-worker.heydari.workers.dev
+Live demo: [2live.ir](https://2live.ir)
 
-## قابلیت‌ها
+## Features
 
-- تولید کد ۶ رقمی TOTP با دوره‌ی ۳۰ ثانیه‌ای و HMAC-SHA1 (استاندارد RFC 6238).
-- **تولید کد کاملاً داخل مرورگر** با Web Crypto؛ secret به هیچ سروری فرستاده نمی‌شود.
-- پشتیبانی از secretهای Base32 با فاصله، حروف کوچک یا علامت `=`؛ ورودی قبل از تولید کد نرمال می‌شود.
-- نگهداری حداکثر ۱۰ کلید؛ هر کلید یک کارت با کد زنده و تایمر دایره‌ای دارد و می‌توان برایش اسم گذاشت.
-- نمایش کد حساب انتخاب‌شده در ۶ کاشی بزرگ با انیمیشن عوض‌شدن رقم‌ها و نوار زمان باقی‌مانده؛ ۵ ثانیه‌ی آخر نارنجی می‌شود.
-- کپی کد با یک کلیک یا کلید <kbd>C</kbd>، و کپی نتیجه‌ی کامل (`SECRET | CODE`).
-- میان‌برها: <kbd>/</kbd> برای رفتن به فیلد ورود، و <kbd>Ctrl</kbd>+<kbd>V</kbd> در هر جای صفحه برای اضافه‌کردن مستقیم secret.
-- **PWA**: قابل نصب روی موبایل و دسکتاپ، اجرا در پنجره‌ی مستقل و کارکرد کامل به‌صورت آفلاین.
-- secretها در `localStorage` همان مرورگر ذخیره می‌شوند؛ کدهای تولیدشده هیچ‌جا ذخیره نمی‌شوند.
-- secretهای ذخیره‌شده در نسخه‌ی قبلی (`totp-history-v1`) خودکار منتقل می‌شوند.
-- رابط واکنش‌گرا برای دسکتاپ و موبایل، با احترام به تنظیم «کاهش حرکت» سیستم.
+- 6-digit TOTP codes with a 30-second period and HMAC-SHA1 (RFC 6238).
+- **Codes are generated entirely in the browser** with Web Crypto — secrets are never sent to any server.
+- Accepts Base32 secrets with spaces, lowercase letters or `=` padding; input is normalized before use.
+- Keeps up to 10 keys. Each key gets a card with a live code and a countdown ring, and can be given a name.
+- The selected key's code is shown on six large tiles with a digit-roll animation and a time-left bar that turns orange in the last 5 seconds.
+- Copy the code with one click or the <kbd>C</kbd> key, or copy the full result (`SECRET | CODE`).
+- Shortcuts: <kbd>/</kbd> focuses the input, and <kbd>Ctrl</kbd>+<kbd>V</kbd> anywhere on the page adds a secret directly.
+- **PWA**: installable on mobile and desktop, runs in its own window, and works fully offline.
+- Secrets are stored in the browser's `localStorage`; generated codes are never stored.
+- Secrets saved by the previous version (`totp-history-v1`) are migrated automatically.
+- Responsive layout for desktop and mobile, and respects the system "reduce motion" setting.
 
-## ساختار پروژه
+## Project structure
 
 ```text
 cf-worker/
 ├── public/
-│   ├── index.html              # صفحه‌ی اصلی
-│   ├── manifest.webmanifest    # تنظیمات PWA
-│   ├── sw.js                   # Service Worker (کش برای حالت آفلاین)
-│   ├── icons/                  # آیکون‌های اپ (192، 512، maskable، Apple)
+│   ├── index.html              # Main page
+│   ├── manifest.webmanifest    # PWA manifest
+│   ├── sw.js                   # Service worker (offline cache)
+│   ├── icons/                  # App icons (192, 512, maskable, Apple)
 │   └── v2/
 │       ├── vault.css
-│       └── vault.js            # منطق برنامه و تولید TOTP
-├── src/index.js                # Worker (سرو فایل‌ها + API قدیمی /api/totp)
+│       └── vault.js            # App logic and TOTP generation
+├── src/index.js                # Worker (serves assets + legacy /api/totp)
 └── wrangler.jsonc
 ```
 
-> `POST /api/totp` هنوز در Worker وجود دارد ولی صفحه‌ی فعلی از آن استفاده نمی‌کند.
+> `POST /api/totp` still exists in the Worker, but the current page does not use it.
 
-## اجرای محلی
+## Run locally
 
-نیازمندی: Node.js و حساب Cloudflare.
+Requirements: Node.js and a Cloudflare account.
 
 ```powershell
 npm install
 npm run dev
 ```
 
-سپس آدرس محلی نمایش‌داده‌شده توسط Wrangler را در مرورگر باز کنید (پیش‌فرض `http://localhost:8787`).
+Then open the local address Wrangler prints (default `http://localhost:8787`).
 
-## انتشار روی Cloudflare
+## Deploy to Cloudflare
 
 ```powershell
 npx wrangler login
 npm run deploy
 ```
 
-پس از انتشار، Wrangler آدرس Worker را نمایش می‌دهد.
+Wrangler prints the Worker URL after deploying.
 
-## نصب به‌عنوان اپ (PWA)
+## Install as an app (PWA)
 
-- **Android / Chrome / Edge:** دکمه‌ی «Install app» بالای صفحه، یا گزینه‌ی Install از منوی مرورگر.
-- **iPhone / iPad:** در Safari، Share ← Add to Home Screen.
+- **Android / Chrome / Edge:** use the "Install app" button at the top of the page, or Install from the browser menu.
+- **iPhone / iPad:** in Safari, tap Share → Add to Home Screen.
 
-بعد از اولین بازدید، برنامه بدون اینترنت هم باز می‌شود و کد می‌سازد.
+After the first visit, the app opens and generates codes without an internet connection.
 
-### به‌روزرسانی فایل‌های اپ
+### Updating app files
 
-صفحه همیشه در حالت آنلاین از شبکه گرفته می‌شود، اما فایل‌های CSS/JS از کش سرو و در پس‌زمینه تازه می‌شوند. بعد از تغییر این فایل‌ها، مقدار `CACHE` در [`public/sw.js`](public/sw.js) را یک شماره بالا ببرید (مثلاً `authenticator-v2`) تا کش قدیمی پاک شود.
+The page itself is always fetched from the network when online, while CSS/JS are served from cache and refreshed in the background. After changing those files, bump `CACHE` in [`public/sw.js`](public/sw.js) (e.g. `authenticator-v2`) so the old cache is cleared.
 
-## حریم خصوصی
+## Privacy
 
-کدها داخل مرورگر ساخته می‌شوند و secret از دستگاه خارج نمی‌شود. فهرست secretها فقط در `localStorage` همان مرورگر قرار دارد. برای پاک‌کردن، از دکمه‌ی `Clear all` در صفحه استفاده کنید یا داده‌های سایت را از تنظیمات مرورگر پاک کنید.
+Codes are generated in the browser and secrets never leave the device. The list of secrets lives only in that browser's `localStorage`. To remove it, use the `Clear all` button on the page or clear the site data in your browser settings.
 
-تنها درخواست بیرونی، بارگذاری فونت‌ها (Space Grotesk و JetBrains Mono) از Google Fonts است.
+The only external request is loading the fonts (Space Grotesk and JetBrains Mono) from Google Fonts.
