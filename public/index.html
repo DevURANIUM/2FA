@@ -2,87 +2,93 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>2FA Code Generator</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#07080a">
+    <title>Authenticator · 2FA Codes</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23c8ff4d'/%3E%3Cpath d='M11 14v-2a5 5 0 0 1 10 0v2' fill='none' stroke='%230b0d06' stroke-width='2.6' stroke-linecap='round'/%3E%3Crect x='8.5' y='14' width='15' height='11' rx='3' fill='%230b0d06'/%3E%3C/svg%3E">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Authenticator">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/v2/vault.css">
   </head>
   <body>
-    <header class="topbar">
+    <div class="backdrop" aria-hidden="true">
+      <div class="grid"></div>
+      <div class="glow"></div>
+    </div>
+
+    <header class="top">
       <a class="brand" href="/">
-        <span class="brand-mark">2F</span>
-        <span>
-          <strong>Authenticator</strong>
-          <small>Private TOTP generator</small>
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M7 10V8a5 5 0 0 1 10 0v2"/><rect x="4.5" y="10" width="15" height="11" rx="3"/></svg>
         </span>
+        <span class="brand-name">Authenticator</span>
+        <span class="brand-tag">TOTP</span>
       </a>
+      <div class="top-actions">
+        <span class="pill"><i></i>Runs entirely in your browser</span>
+        <button class="install" id="install" type="button" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19h14"/></svg>
+          Install app
+        </button>
+      </div>
     </header>
 
-    <main class="shell" id="generator">
-      <section class="hero">
-        <p class="eyebrow">Local 2FA Utility</p>
-        <h1>Generate secure 2FA codes.</h1>
-        <p class="lead">Paste your authenticator secret and get a fresh one-time code every 30 seconds.</p>
+    <main class="wrap">
+      <section class="stage" id="stage" aria-labelledby="curLabel">
+        <div class="stage-head">
+          <div class="who">
+            <span class="who-label" id="curLabel">No account selected</span>
+            <span class="who-sub" id="curSecret">Paste a secret below to begin</span>
+          </div>
+          <span class="secs"><b id="curSecs">--</b><small>sec</small></span>
+        </div>
+
+        <button class="tiles is-empty" id="tiles" type="button" aria-label="Copy code">
+          <span class="tile"></span><span class="tile"></span><span class="tile"></span>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="tile"></span><span class="tile"></span><span class="tile"></span>
+        </button>
+
+        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+
+        <div class="stage-foot">
+          <span class="kbd-hint">Click the code or press <kbd>C</kbd> to copy</span>
+          <button class="ghost" id="copyFull" type="button">Copy <code>SECRET | CODE</code></button>
+        </div>
       </section>
 
-      <section class="glass-card">
-        <form id="totpForm" class="input-panel">
-          <div class="section-title">
-            <span>Secret</span>
-            <small>Saved in this browser</small>
-          </div>
-          <label for="secret">2FA Secret</label>
-          <textarea id="secret" name="secret" spellcheck="false" autocomplete="off" placeholder="Paste 2FA secret here"></textarea>
+      <form class="cmd" id="cmd" autocomplete="off">
+        <svg class="cmd-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M15 8l2 2"/></svg>
+        <label for="secret" class="sr-only">2FA secret key</label>
+        <input id="secret" name="secret" spellcheck="false" autocomplete="off" placeholder="Paste secret key">
+        <button class="ghost" id="paste" type="button">Paste</button>
+        <button class="cta" type="submit">Add<span aria-hidden="true">↵</span></button>
+      </form>
 
-          <div class="history-header">
-            <label for="historyList">Saved 2FA secrets</label>
-            <button id="clearHistory" class="history-clear" type="button">Clear</button>
-          </div>
-          <div id="historyList" class="history-list" aria-live="polite">
-            <p class="history-empty">Saved 2FA secrets will appear here.</p>
-          </div>
-        </form>
-
-        <section class="result-panel">
-          <div class="section-title">
-            <span>Code</span>
-            <small id="timer">Waiting for secret</small>
-          </div>
-
-          <div class="token-meter" aria-label="Token timer">
-            <div class="token-head">
-              <span class="token-title"><i aria-hidden="true"></i>Token lifetime</span>
-              <span class="token-pill"><b id="tokenSeconds">s</b></span>
-            </div>
-            <div class="token-bars" id="tokenBars" aria-hidden="true"></div>
-          </div>
-
-          <div class="code-display">
-            <button id="codeValue" class="code-value" type="button" title="Click to copy code">------</button>
-            <small>Click to copy</small>
-          </div>
-
-          <label for="display">Result</label>
-          <textarea id="display" readonly placeholder="SECRET | CODE"></textarea>
-
-          <div class="actions">
-            <button class="secondary" id="copyAll" type="button">Copy All</button>
-            <button class="primary" id="copyCode" type="button">Copy Code</button>
-          </div>
-          <p id="message"></p>
-        </section>
-      </section>
-
-      <section class="security-note" id="security">
-        <span>Private</span>
-        <p>Your saved 2FA secrets stay in this browser only. Generated codes are not stored.</p>
+      <section class="vault" aria-labelledby="vaultTitle">
+        <div class="vault-head">
+          <h2 id="vaultTitle">Your keys <span id="count">0</span></h2>
+          <button class="ghost danger" id="clearAll" type="button">Clear all</button>
+        </div>
+        <div class="cards" id="cards"></div>
       </section>
     </main>
 
-    <footer class="footer-line">
-      <span>Powered by</span>
-      <a href="https://DevRouter.t.me" target="_blank" rel="noreferrer">URANIUM</a>
+    <footer class="foot">
+      <span>Secrets &amp; codes never leave this device</span>
+      <span class="dot-sep">·</span>
+      <span>Powered by <a href="https://DevRouter.t.me" target="_blank" rel="noreferrer">URANIUM</a></span>
     </footer>
 
-    <script src="/static/app.js"></script>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="/v2/vault.js"></script>
   </body>
 </html>
